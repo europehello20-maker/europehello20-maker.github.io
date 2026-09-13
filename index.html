@@ -47,7 +47,9 @@
     /* Header Banner */
     .banner {
       height: 140px;
-      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+      background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80');
+      background-size: cover;
+      background-position: center;
       position: relative;
     }
 
@@ -169,38 +171,6 @@
       border: 1px solid var(--card-border);
     }
 
-    /* Currently Playing Activity Card */
-    .activity-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 6px;
-    }
-
-    .activity-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 8px;
-      object-fit: cover;
-    }
-
-    .activity-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .activity-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .activity-time {
-      font-size: 0.8rem;
-      color: #4cd137;
-      margin-top: 2px;
-    }
-
     /* Owner Panel Section */
     .uploader-card {
       margin-top: 14px;
@@ -261,6 +231,18 @@
       border-color: var(--accent-orange);
     }
 
+    .reset-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 10px;
+      text-decoration: underline;
+      width: 100%;
+      text-align: center;
+    }
+
     .hidden {
       display: none;
     }
@@ -270,7 +252,7 @@
 
   <div class="profile-card">
     <!-- Header Banner -->
-    <div class="banner">
+    <div class="banner" id="profileBanner">
       <div class="avatar-container">
         <div class="avatar" id="profileAvatar">
           <div class="status-dot"></div>
@@ -302,25 +284,13 @@
         </div>
       </div>
 
-      <!-- Playing Activity Section -->
-      <div class="section-box">
-        <div class="section-title">Playing</div>
-        <div class="activity-card">
-          <img class="activity-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Activity Avatar">
-          <div class="activity-info">
-            <span class="activity-title">watching BTMC videos...</span>
-            <span class="activity-time">🎮 6 : 46 : 24</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Owner Control Panel for Avatar Upload -->
+      <!-- Owner Control Panel -->
       <div class="uploader-card">
         <div class="section-title" style="color: var(--accent-orange);">Owner Panel</div>
         
         <!-- Lock Screen -->
         <div id="lockScreen">
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to update profile picture:</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to customize profile:</p>
           <input type="password" id="pinInput" placeholder="Enter PIN (Default: 1234)">
           <button class="action-btn" onclick="unlockPanel()">Unlock</button>
         </div>
@@ -328,8 +298,16 @@
         <!-- Upload Panel -->
         <div id="uploadScreen" class="hidden">
           <p style="font-size: 0.8rem; color: #4cd137; margin-bottom: 6px;">✓ Authenticated as Owner</p>
-          <label for="pfpUpload" class="file-label" id="fileLabel">Choose New Avatar Image</label>
-          <input type="file" id="pfpUpload" accept="image/*" onchange="updateProfilePicture(event)">
+          
+          <!-- Avatar Upload -->
+          <label for="pfpUpload" class="file-label" id="pfpLabel">Upload Profile Picture</label>
+          <input type="file" id="pfpUpload" accept="image/*" onchange="updateImage(event, 'avatar')">
+
+          <!-- Banner Upload -->
+          <label for="bannerUpload" class="file-label" id="bannerLabel">Upload Banner Image</label>
+          <input type="file" id="bannerUpload" accept="image/*" onchange="updateImage(event, 'banner')">
+
+          <button class="reset-btn" onclick="resetDefaults()">Reset to default images</button>
         </div>
       </div>
 
@@ -337,8 +315,20 @@
   </div>
 
   <script>
-    // Secret PIN (Default is 1234)
-    const OWNER_PIN = "85734";
+    const OWNER_PIN = "1234";
+
+    // Load saved images from browser memory on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAvatar = localStorage.getItem('custom_pfp');
+      const savedBanner = localStorage.getItem('custom_banner');
+
+      if (savedAvatar) {
+        document.getElementById('profileAvatar').style.backgroundImage = `url('${savedAvatar}')`;
+      }
+      if (savedBanner) {
+        document.getElementById('profileBanner').style.backgroundImage = `url('${savedBanner}')`;
+      }
+    });
 
     function unlockPanel() {
       const pin = document.getElementById('pinInput').value;
@@ -350,19 +340,30 @@
       }
     }
 
-    function updateProfilePicture(event) {
+    function updateImage(event, type) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          // Update the main avatar element with the uploaded image
-          const avatar = document.getElementById('profileAvatar');
-          avatar.style.backgroundImage = `url('${e.target.result}')`;
-          
-          document.getElementById('fileLabel').innerText = "✓ Avatar Updated!";
+          const imageData = e.target.result;
+          if (type === 'avatar') {
+            document.getElementById('profileAvatar').style.backgroundImage = `url('${imageData}')`;
+            localStorage.setItem('custom_pfp', imageData);
+            document.getElementById('pfpLabel').innerText = "✓ Avatar Saved!";
+          } else if (type === 'banner') {
+            document.getElementById('profileBanner').style.backgroundImage = `url('${imageData}')`;
+            localStorage.setItem('custom_banner', imageData);
+            document.getElementById('bannerLabel').innerText = "✓ Banner Saved!";
+          }
         };
         reader.readAsDataURL(file);
       }
+    }
+
+    function resetDefaults() {
+      localStorage.removeItem('custom_pfp');
+      localStorage.removeItem('custom_banner');
+      location.reload();
     }
   </script>
 </body>

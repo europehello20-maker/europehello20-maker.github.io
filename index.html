@@ -13,6 +13,7 @@
       --neon-cyan: #00f0ff;
       --neon-pink: #ff0055;
       --neon-green: #00ff66;
+      --neon-red: #ff0055;
       --text-main: #e2e8f0;
       --text-muted: #64748b;
     }
@@ -119,16 +120,17 @@
       transform: scale(1.05) rotate(-3deg);
     }
 
+    /* DND Red Status Dot */
     .status-dot {
       width: 14px;
       height: 14px;
-      background-color: var(--neon-green);
+      background-color: var(--neon-red);
       border-radius: 50%;
       border: 2px solid #000;
       position: absolute;
       bottom: -4px;
       right: -4px;
-      box-shadow: 0 0 8px var(--neon-green);
+      box-shadow: 0 0 8px var(--neon-red);
       animation: blink 1.5s infinite;
     }
 
@@ -137,12 +139,12 @@
       50% { opacity: 0.3; }
     }
 
-    /* Speech Bubble */
+    /* Adjusted Speech Bubble Position */
     .speech-bubble {
       position: absolute;
-      bottom: -18px;
+      bottom: 10px;
       left: 125px;
-      background: rgba(0, 240, 255, 0.15);
+      background: rgba(0, 0, 0, 0.75);
       border: 1px solid var(--neon-cyan);
       color: var(--neon-cyan);
       padding: 6px 12px;

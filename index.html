@@ -32,7 +32,6 @@
       padding: 20px;
     }
 
-    /* Main Profile Card */
     .profile-card {
       width: 100%;
       max-width: 440px;
@@ -44,7 +43,6 @@
       backdrop-filter: blur(16px);
     }
 
-    /* Header Banner */
     .banner {
       height: 140px;
       background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80');
@@ -53,7 +51,6 @@
       position: relative;
     }
 
-    /* Avatar & Status Indicator */
     .avatar-container {
       position: absolute;
       bottom: -40px;
@@ -82,7 +79,6 @@
       right: 2px;
     }
 
-    /* Speech Bubble */
     .speech-bubble {
       position: absolute;
       bottom: -15px;
@@ -96,7 +92,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    /* Content Area */
     .content {
       padding: 50px 20px 20px 20px;
     }
@@ -135,7 +130,6 @@
       color: var(--text-main);
     }
 
-    /* Section Cards */
     .section-box {
       background: rgba(0, 0, 0, 0.25);
       border: 1px solid var(--card-border);
@@ -171,7 +165,6 @@
       border: 1px solid var(--card-border);
     }
 
-    /* Owner Panel Section */
     .uploader-card {
       margin-top: 14px;
       background: rgba(229, 142, 38, 0.05);
@@ -231,27 +224,14 @@
       border-color: var(--accent-orange);
     }
 
-    .reset-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      cursor: pointer;
-      margin-top: 10px;
-      text-decoration: underline;
-      width: 100%;
-      text-align: center;
-    }
-
     .hidden {
-      display: none;
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
   <div class="profile-card">
-    <!-- Header Banner -->
     <div class="banner" id="profileBanner">
       <div class="avatar-container">
         <div class="avatar" id="profileAvatar">
@@ -261,7 +241,6 @@
       <div class="speech-bubble">the only one here...</div>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
       <div class="display-name">czz</div>
       <div class="username-row">
@@ -273,7 +252,6 @@
         /btmc | love yall
       </div>
 
-      <!-- Game Collection Section -->
       <div class="section-box">
         <div class="section-title">Game Collection</div>
         <div class="game-icons">
@@ -284,30 +262,26 @@
         </div>
       </div>
 
-      <!-- Owner Control Panel -->
+      <!-- Owner Panel -->
       <div class="uploader-card">
         <div class="section-title" style="color: var(--accent-orange);">Owner Panel</div>
         
-        <!-- Lock Screen -->
+        <!-- PIN Input -->
         <div id="lockScreen">
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to customize profile:</p>
-          <input type="password" id="pinInput" placeholder="Enter PIN (Default: 1234)">
-          <button class="action-btn" onclick="unlockPanel()">Unlock</button>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to update images:</p>
+          <input type="password" id="pinInput" placeholder="Enter PIN">
+          <button type="button" class="action-btn" onclick="unlockPanel()">Unlock</button>
         </div>
 
-        <!-- Upload Panel -->
+        <!-- Controls -->
         <div id="uploadScreen" class="hidden">
-          <p style="font-size: 0.8rem; color: #4cd137; margin-bottom: 6px;">✓ Authenticated as Owner</p>
+          <p style="font-size: 0.8rem; color: #4cd137; margin-bottom: 6px;">✓ Authenticated</p>
           
-          <!-- Avatar Upload -->
           <label for="pfpUpload" class="file-label" id="pfpLabel">Upload Profile Picture</label>
           <input type="file" id="pfpUpload" accept="image/*" onchange="updateImage(event, 'avatar')">
 
-          <!-- Banner Upload -->
           <label for="bannerUpload" class="file-label" id="bannerLabel">Upload Banner Image</label>
           <input type="file" id="bannerUpload" accept="image/*" onchange="updateImage(event, 'banner')">
-
-          <button class="reset-btn" onclick="resetDefaults()">Reset to default images</button>
         </div>
       </div>
 
@@ -315,9 +289,9 @@
   </div>
 
   <script>
-    const OWNER_PIN = "78888";
+    // Set your PIN here (must match what you type in quotes)
+    const OWNER_PIN = "1234";
 
-    // Load saved images from browser memory on page load
     window.addEventListener('DOMContentLoaded', () => {
       const savedAvatar = localStorage.getItem('custom_pfp');
       const savedBanner = localStorage.getItem('custom_banner');
@@ -331,7 +305,7 @@
     });
 
     function unlockPanel() {
-      const pin = document.getElementById('pinInput').value;
+      const pin = document.getElementById('pinInput').value.trim();
       if (pin === OWNER_PIN) {
         document.getElementById('lockScreen').classList.add('hidden');
         document.getElementById('uploadScreen').classList.remove('hidden');
@@ -358,12 +332,6 @@
         };
         reader.readAsDataURL(file);
       }
-    }
-
-    function resetDefaults() {
-      localStorage.removeItem('custom_pfp');
-      localStorage.removeItem('custom_banner');
-      location.reload();
     }
   </script>
 </body>

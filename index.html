@@ -7,14 +7,14 @@
   <style>
     :root {
       --bg-dark: #0a0c10;
-      --card-bg: rgba(15, 20, 30, 0.85);
+      --card-bg: rgba(15, 20, 30, 0.88);
       --card-border: #ff8c00;
       --neon-orange: #ff8c00;
       --neon-cyan: #00f0ff;
       --neon-pink: #ff0055;
+      --neon-green: #00ff66;
       --text-main: #e2e8f0;
       --text-muted: #64748b;
-      --status-online: #00ff66;
     }
 
     * {
@@ -27,9 +27,9 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.05) 0%, transparent 60%),
-        linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 0, 0.08) 0%, transparent 60%),
+        linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
       background-size: 100% 100%, 20px 20px, 20px 20px;
       color: var(--text-main);
       display: flex;
@@ -41,7 +41,7 @@
       overflow-x: hidden;
     }
 
-    /* CRT Scanline Overlay */
+    /* CRT Scanline Effect */
     body::before {
       content: " ";
       display: block;
@@ -51,38 +51,43 @@
       background-size: 100% 4px;
       z-index: 99;
       pointer-events: none;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
-    /* Main Profile Card */
+    /* Profile Card Container */
     .profile-card {
       width: 100%;
       max-width: 460px;
       background: var(--card-bg);
-      border: 1px solid var(--neon-orange);
+      border: 2px solid var(--neon-orange);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 0 25px rgba(255, 140, 0, 0.2), inset 0 0 15px rgba(255, 140, 0, 0.05);
+      box-shadow: 0 0 25px rgba(255, 140, 0, 0.25), inset 0 0 15px rgba(255, 140, 0, 0.05);
       backdrop-filter: blur(12px);
       position: relative;
+      animation: cardPulse 4s infinite alternate;
+    }
+
+    @keyframes cardPulse {
+      0% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.2); }
+      100% { box-shadow: 0 0 35px rgba(0, 240, 255, 0.3); }
     }
 
     /* Header Banner */
     .banner {
       height: 150px;
-      background-image: url('https://i.pinimg.com/1200x/32/96/62/32966208e4cc8d0c0fa15cd967948544.jpg');
+      background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80');
       background-size: cover;
       background-position: center;
       position: relative;
       border-bottom: 2px solid var(--neon-orange);
     }
 
-    /* Top HUD Info */
     .hud-header {
       position: absolute;
       top: 10px;
       right: 12px;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--neon-cyan);
       padding: 4px 8px;
       border-radius: 6px;
@@ -91,7 +96,6 @@
       letter-spacing: 1px;
     }
 
-    /* Avatar Container */
     .avatar-container {
       position: absolute;
       bottom: -42px;
@@ -103,23 +107,34 @@
       height: 88px;
       border-radius: 14px;
       border: 2px solid var(--neon-cyan);
-      background-image: url('https://pbs.twimg.com/profile_images/2087661869553319936/2Axpndb4_400x400.jpg');
+      background-image: url('https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=300&q=80');
       background-size: cover;
       background-position: center;
       position: relative;
       box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05) rotate(-3deg);
     }
 
     .status-dot {
       width: 14px;
       height: 14px;
-      background-color: var(--status-online);
+      background-color: var(--neon-green);
       border-radius: 50%;
       border: 2px solid #000;
       position: absolute;
       bottom: -4px;
       right: -4px;
-      box-shadow: 0 0 8px var(--status-online);
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     /* Speech Bubble */
@@ -127,7 +142,7 @@
       position: absolute;
       bottom: -18px;
       left: 125px;
-      background: rgba(0, 240, 255, 0.1);
+      background: rgba(0, 240, 255, 0.15);
       border: 1px solid var(--neon-cyan);
       color: var(--neon-cyan);
       padding: 6px 12px;
@@ -179,6 +194,13 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .badge:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-cyan);
     }
 
     .bio {
@@ -210,7 +232,7 @@
       font-weight: 800;
     }
 
-    /* Music Player Component */
+    /* Music Player */
     .music-player {
       display: flex;
       align-items: center;
@@ -241,53 +263,98 @@
       background: var(--neon-cyan);
       color: #000;
       border: none;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
       font-weight: bold;
+      font-size: 1rem;
       box-shadow: 0 0 10px var(--neon-cyan);
+      transition: transform 0.2s;
     }
 
-    /* Social Links Grid */
-    .social-grid {
+    .play-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Soundboard / Meme FX Grid */
+    .soundboard-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
     }
 
-    .social-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      padding: 8px;
+    .sound-btn {
+      background: rgba(255, 0, 85, 0.1);
+      border: 1px solid var(--neon-pink);
+      color: var(--neon-pink);
+      padding: 6px;
       border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      cursor: pointer;
       text-align: center;
-      text-decoration: none;
-      font-size: 0.75rem;
       transition: all 0.2s ease;
     }
 
-    .social-btn:hover {
-      border-color: var(--neon-orange);
-      color: var(--neon-orange);
-      box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+    .sound-btn:hover {
+      background: var(--neon-pink);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-pink);
     }
 
-    /* Mini Retro Terminal */
+    /* Mini Game Counter */
+    .clicker-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .clicker-btn {
+      background: var(--neon-orange);
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+
+    .clicker-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Retro Interactive Terminal */
     .terminal-box {
       background: #000;
       border: 1px solid #1e293b;
       padding: 8px;
       border-radius: 6px;
       font-size: 0.75rem;
-      color: #4cd137;
-      height: 70px;
+      color: var(--neon-green);
+      height: 90px;
       overflow-y: auto;
+    }
+
+    .terminal-input-row {
+      display: flex;
+      gap: 6px;
       margin-top: 6px;
     }
 
-    /* Owner Control Panel */
+    .terminal-input-row input {
+      flex: 1;
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--neon-green);
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    /* Owner Panel */
     .uploader-card {
       margin-top: 14px;
       background: rgba(255, 140, 0, 0.05);
@@ -378,12 +445,12 @@
 
     <!-- Main Content -->
     <div class="content">
-      <div class="display-name" id="profileDisplayName">ezz</div>
+      <div class="display-name" id="profileDisplayName">czz</div>
       <div class="username-row">
         <span id="profileUsername">qfck.</span> • <span>he/him</span>
       </div>
 
-      <!-- Sci-Fi Badges -->
+      <!-- Badges -->
       <div class="badges-container">
         <span class="badge">⚔️ BMC</span>
         <span class="badge">⚡ CYBER_SYNC</span>
@@ -392,39 +459,52 @@
       </div>
 
       <div class="bio" id="profileBio">
-        /btmc | love yall // custom retro cyberpunk terminal environment
+        /btmc | love yall // Custom retro cyberpunk terminal environment.
       </div>
 
       <!-- Cyber Music Player -->
       <div class="section-box">
-        <div class="section-title">Cyber Audio Player</div>
+        <div class="section-title">Music Player</div>
         <div class="music-player">
           <div class="track-info">
-            <span class="track-title" id="songTitle">Cyberpunk Synthwave Lofi</span>
-            <span class="track-sub">Status: Audio Offline</span>
+            <span class="track-title" id="songTitle">Maschio - Maniac (Italian Version)</span>
+            <span class="track-sub" id="songStatus">Status: Offline</span>
           </div>
           <button class="play-btn" id="audioToggle" onclick="toggleAudio()">▶</button>
         </div>
       </div>
 
-      <!-- Social Links -->
+      <!-- Meme Soundboard -->
       <div class="section-box">
-        <div class="section-title">Social Matrix</div>
-        <div class="social-grid">
-          <a href="#" class="social-btn">Discord</a>
-          <a href="#" class="social-btn">YouTube</a>
-          <a href="#" class="social-btn">Twitter</a>
-          <a href="#" class="social-btn">Twitch</a>
+        <div class="section-title">Audio Matrix (SFX)</div>
+        <div class="soundboard-grid">
+          <button class="sound-btn" onclick="playSfx('bruh')">🔊 BRUH</button>
+          <button class="sound-btn" onclick="playSfx('bonk')">🔨 BONK</button>
+          <button class="sound-btn" onclick="playSfx('taco')">🔔 TACO</button>
+          <button class="sound-btn" onclick="playSfx('airhorn')">📢 HORN</button>
+          <button class="sound-btn" onclick="playSfx('boom')">💥 BOOM</button>
+          <button class="sound-btn" onclick="playSfx('quack')">🦆 QUACK</button>
         </div>
       </div>
 
-      <!-- Terminal Output -->
+      <!-- Mini-Game Clicker -->
       <div class="section-box">
-        <div class="section-title">Terminal Stream</div>
+        <div class="section-title">Nuke Matrix</div>
+        <div class="clicker-box">
+          <span style="font-size: 0.8rem; color: var(--neon-cyan);" id="nukeCount">Nukes Launched: 0</span>
+          <button class="clicker-btn" onclick="launchNuke()">🚀 LAUNCH NUKE</button>
+        </div>
+      </div>
+
+      <!-- Retro Terminal Screen -->
+      <div class="section-box">
+        <div class="section-title">Interactive Terminal</div>
         <div class="terminal-box" id="terminalLog">
-          > System booted successfully.<br>
-          > Connected to local network.<br>
-          > Awaiting user input...
+          > Cyber Terminal Ready.<br>
+          > Type 'help' for available commands.
+        </div>
+        <div class="terminal-input-row">
+          <input type="text" id="termCmd" placeholder="Type command..." onkeydown="handleTermInput(event)">
         </div>
       </div>
 
@@ -441,7 +521,7 @@
 
         <!-- Editable Form Controls -->
         <div id="uploadScreen" class="hidden">
-          <p style="font-size: 0.75rem; color: var(--status-online); margin-bottom: 6px;">✓ ACCESS GRANTED</p>
+          <p style="font-size: 0.75rem; color: var(--neon-green); margin-bottom: 6px;">✓ ACCESS GRANTED</p>
           
           <div class="panel-group">
             <label>DISPLAY NAME</label>
@@ -477,27 +557,68 @@
   </div>
 
   <script>
-    // Password set to 10122
+    // ==========================================
+    // DEFAULT CONFIG (TYPE YOUR VALUES HERE)
+    // ==========================================
+    const DEFAULT_USERNAME = "qfck.";
+    const DEFAULT_DISPLAY_NAME = "czz";
+    const DEFAULT_BIO = "/btmc | love yall";
+    const DEFAULT_STATUS = "the only one here...";
+
+    // PIN (Password set to 10122)
     const OWNER_PIN = "10122";
 
-    // Audio setup
+    // Audio Setup
     let isPlaying = false;
-    const audio = new Audio('const audio = new Audio('music.mp3');');
+    const audio = new Audio('music.mp3');
 
     function toggleAudio() {
       const btn = document.getElementById('audioToggle');
-      const sub = document.querySelector('.track-sub');
+      const sub = document.getElementById('songStatus');
+      
       if (!isPlaying) {
-        audio.play();
-        btn.innerText = '❚❚';
-        sub.innerText = 'Status: Playing...';
-        isPlaying = true;
+        audio.play().then(() => {
+          btn.innerText = '❚❚';
+          sub.innerText = 'Status: Playing...';
+          isPlaying = true;
+          logTerminal("> Audio playback started: Maschio - Maniac");
+        }).catch(err => {
+          alert("Could not load music.mp3! Make sure music.mp3 is uploaded in your GitHub repository.");
+          logTerminal("> ERROR: Audio file 'music.mp3' not found.");
+        });
       } else {
         audio.pause();
         btn.innerText = '▶';
         sub.innerText = 'Status: Paused';
         isPlaying = false;
+        logTerminal("> Audio paused.");
       }
+    }
+
+    // Meme SFX Player
+    const sfxList = {
+      bruh: 'https://www.myinstants.com/media/sounds/bruh.mp3',
+      bonk: 'https://www.myinstants.com/media/sounds/bonk-sound-effect.mp3',
+      taco: 'https://www.myinstants.com/media/sounds/taco-bell-bong.mp3',
+      airhorn: 'https://www.myinstants.com/media/sounds/mlg-airhorn.mp3',
+      boom: 'https://www.myinstants.com/media/sounds/vine-boom.mp3',
+      quack: 'https://www.myinstants.com/media/sounds/quack.mp3'
+    };
+
+    function playSfx(type) {
+      if (sfxList[type]) {
+        const sound = new Audio(sfxList[type]);
+        sound.play();
+        logTerminal(`> SFX Triggered: [${type.toUpperCase()}]`);
+      }
+    }
+
+    // Nuke Clicker Counter
+    let nukeCount = 0;
+    function launchNuke() {
+      nukeCount++;
+      document.getElementById('nukeCount').innerText = `Nukes Launched: ${nukeCount}`;
+      playSfx('boom');
     }
 
     // Live HUD Clock
@@ -506,30 +627,29 @@
       document.getElementById('clock').innerText = `SYS_TIME: ${now.toLocaleTimeString()}`;
     }, 1000);
 
-    // Persistent Local Storage Initialization
+    // Initialization (Checks Code Defaults First, Then LocalStorage)
     window.addEventListener('DOMContentLoaded', () => {
       const savedAvatar = localStorage.getItem('custom_pfp');
       const savedBanner = localStorage.getItem('custom_banner');
-      const savedDisplayName = localStorage.getItem('custom_display_name');
-      const savedUsername = localStorage.getItem('custom_username');
-      const savedStatus = localStorage.getItem('custom_status');
-      const savedBio = localStorage.getItem('custom_bio');
+      const savedDisplayName = localStorage.getItem('custom_display_name') || DEFAULT_DISPLAY_NAME;
+      const savedUsername = localStorage.getItem('custom_username') || DEFAULT_USERNAME;
+      const savedStatus = localStorage.getItem('custom_status') || DEFAULT_STATUS;
+      const savedBio = localStorage.getItem('custom_bio') || DEFAULT_BIO;
 
       if (savedAvatar) document.getElementById('profileAvatar').style.backgroundImage = `url('${savedAvatar}')`;
       if (savedBanner) document.getElementById('profileBanner').style.backgroundImage = `url('${savedBanner}')`;
-      if (savedDisplayName) document.getElementById('profileDisplayName').innerText = savedDisplayName;
-      if (savedUsername) {
-        document.getElementById('profileUsername').innerText = savedUsername;
-        document.title = `${savedUsername} // CYBER_PROFILE`;
-      }
-      if (savedStatus) document.getElementById('profileStatus').innerText = savedStatus;
-      if (savedBio) document.getElementById('profileBio').innerText = savedBio;
+      
+      document.getElementById('profileDisplayName').innerText = savedDisplayName;
+      document.getElementById('profileUsername').innerText = savedUsername;
+      document.title = `${savedUsername} // CYBER_PROFILE`;
+      document.getElementById('profileStatus').innerText = savedStatus;
+      document.getElementById('profileBio').innerText = savedBio;
     });
 
-    // Authenticate PIN
+    // Authenticate PIN (Strict string comparison)
     function unlockPanel() {
-      const pin = document.getElementById('pinInput').value.trim();
-      if (pin === OWNER_PIN) {
+      const inputPin = document.getElementById('pinInput').value.trim();
+      if (inputPin === OWNER_PIN) {
         document.getElementById('lockScreen').classList.add('hidden');
         document.getElementById('uploadScreen').classList.remove('hidden');
 
@@ -538,14 +658,14 @@
         document.getElementById('editStatus').value = document.getElementById('profileStatus').innerText;
         document.getElementById('editBio').value = document.getElementById('profileBio').innerText;
 
-        logTerminal("> Access Granted: Owner Authenticated.");
+        logTerminal("> AUTHENTICATION SUCCESSFUL. WELCOME OPERATOR.");
       } else {
         alert('ACCESS DENIED: INCORRECT PIN');
-        logTerminal("> WARNING: Unauthorized access attempt.");
+        logTerminal("> SECURITY WARNING: Incorrect PIN entered.");
       }
     }
 
-    // Save Text Controls
+    // Save Text Changes
     function saveTextChanges() {
       const newDisplayName = document.getElementById('editDisplayName').value;
       const newUsername = document.getElementById('editUsername').value;
@@ -570,11 +690,11 @@
         localStorage.setItem('custom_bio', newBio);
       }
 
-      logTerminal("> Profile text data updated successfully.");
-      alert('Profile updated!');
+      logTerminal("> System profile records updated.");
+      alert('Profile updated successfully!');
     }
 
-    // Upload & Save Image Controls
+    // Image Upload
     function updateImage(event, type) {
       const file = event.target.files[0];
       if (file) {
@@ -585,15 +705,40 @@
             document.getElementById('profileAvatar').style.backgroundImage = `url('${imageData}')`;
             localStorage.setItem('custom_pfp', imageData);
             document.getElementById('pfpLabel').innerText = "✓ AVATAR SAVED";
-            logTerminal("> Avatar image updated.");
+            logTerminal("> Profile picture updated.");
           } else if (type === 'banner') {
             document.getElementById('profileBanner').style.backgroundImage = `url('${imageData}')`;
             localStorage.setItem('custom_banner', imageData);
             document.getElementById('bannerLabel').innerText = "✓ BANNER SAVED";
-            logTerminal("> Banner image updated.");
+            logTerminal("> Banner picture updated.");
           }
         };
         reader.readAsDataURL(file);
+      }
+    }
+
+    // Interactive Terminal
+    function handleTermInput(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('termCmd');
+        const cmd = input.value.trim().toLowerCase();
+        input.value = '';
+
+        logTerminal(`> ${cmd}`);
+
+        if (cmd === 'help') {
+          logTerminal("Commands: help, ping, nuke, meme, clear");
+        } else if (cmd === 'ping') {
+          logTerminal("PONG! Latency: 1ms");
+        } else if (cmd === 'nuke') {
+          launchNuke();
+        } else if (cmd === 'meme') {
+          playSfx('airhorn');
+        } else if (cmd === 'clear') {
+          document.getElementById('terminalLog').innerHTML = "> Terminal cleared.";
+        } else {
+          logTerminal(`Command not recognized: '${cmd}'`);
+        }
       }
     }
 

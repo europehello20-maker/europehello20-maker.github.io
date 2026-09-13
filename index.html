@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>qfck. | Profile</title>
+  <style>
+    :root {
+      --bg-dark: #0f1319;
+      --card-bg: rgba(23, 28, 38, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-orange: #e58e26;
+      --text-main: #f0f4f8;
+      --text-muted: #9ba1b0;
+      --status-dnd: #ed4245;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Main Container */
+    .profile-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Header Banner */
+    .banner {
+      height: 140px;
+      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+      position: relative;
+    }
+
+    /* Avatar & Status */
+    .avatar-container {
+      position: absolute;
+      bottom: -40px;
+      left: 20px;
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 4px solid #131720;
+      background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=200&q=80') center/cover;
+      position: relative;
+    }
+
+    .status-dot {
+      width: 18px;
+      height: 18px;
+      background-color: var(--status-dnd);
+      border-radius: 50%;
+      border: 3px solid #131720;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+    }
+
+    /* Speech Bubble */
+    .speech-bubble {
+      position: absolute;
+      bottom: -15px;
+      left: 115px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Content Area */
+    .content {
+      padding: 50px 20px 20px 20px;
+    }
+
+    .display-name {
+      color: var(--accent-orange);
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .username-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bio {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    /* Section Cards */
+    .section-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .game-icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .game-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: #222733;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    /* ISO Uploader Section */
+    .uploader-card {
+      margin-top: 14px;
+      background: rgba(229, 142, 38, 0.05);
+      border: 1px dashed rgba(229, 142, 38, 0.3);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .upload-btn, .action-btn {
+      width: 100%;
+      background: var(--accent-orange);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .upload-btn:hover, .action-btn:hover {
+      opacity: 0.9;
+    }
+
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      background: #131720;
+      color: #fff;
+      margin-top: 6px;
+      outline: none;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .iso-list {
+      list-style: none;
+      margin-top: 8px;
+    }
+
+    .iso-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+
+    .iso-item a {
+      color: var(--accent-orange);
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-card">
+    <!-- Header Banner -->
+    <div class="banner">
+      <div class="avatar-container">
+        <div class="avatar">
+          <div class="status-dot"></div>
+        </div>
+      </div>
+      <div class="speech-bubble">the only one here...</div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="display-name">czz</div>
+      <div class="username-row">
+        <span>qfck.</span> • <span>he/him</span>
+        <span class="badge">⚔️ BMC</span>
+      </div>
+
+      <div class="bio">
+        /btmc | love yall
+      </div>
+
+      <!-- Game Collection Section -->
+      <div class="section-box">
+        <div class="section-title">Game Collection</div>
+        <div class="game-icons">
+          <div class="game-icon" style="color: #ff9d00;">λ²</div>
+          <div class="game-icon" style="color: #0095ff;">G</div>
+          <div class="game-icon" style="color: #ff4655;">V</div>
+          <div class="game-icon" style="color: #aaa;">+4</div>
+        </div>
+      </div>
+
+      <!-- Custom ISO Downloads Section -->
+      <div class="section-box">
+        <div class="section-title">Custom Windows 10 Builds</div>
+        <ul class="iso-list" id="isoList">
+          <li class="iso-item">
+            <span>Win10_Custom_Debloated.iso</span>
+            <a href="#" onclick="alert('Add your direct download link here!')">Download</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Owner-Only Upload Panel -->
+      <div class="uploader-card">
+        <div class="section-title" style="color: var(--accent-orange);">Owner Control Panel</div>
+        
+        <!-- Passcode Gate -->
+        <div id="lockScreen">
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to upload custom ISO builds:</p>
+          <input type="password" id="pinInput" placeholder="Enter PIN (Default: 1234)">
+          <button class="action-btn" onclick="unlockPanel()">Unlock</button>
+        </div>
+
+        <!-- Hidden Upload Area -->
+        <div id="uploadScreen" class="hidden">
+          <p style="font-size: 0.8rem; color: #4cd137; margin-bottom: 6px;">✓ Authenticated as Owner</p>
+          <input type="text" id="isoName" placeholder="ISO Name (e.g. Win10 Lite v2)">
+          <input type="text" id="isoUrl" placeholder="Download Link (Drive/Mega/etc.)">
+          <button class="upload-btn" onclick="addIso()">Add ISO to Profile</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple PIN protection (Change '1234' to your secret code)
+    const OWNER_PIN = "748322";
+
+    function unlockPanel() {
+      const pin = document.getElementById('pinInput').value;
+      if (pin === OWNER_PIN) {
+        document.getElementById('lockScreen').classList.add('hidden');
+        document.getElementById('uploadScreen').classList.remove('hidden');
+      } else {
+        alert('Incorrect PIN!');
+      }
+    }
+
+    function addIso() {
+      const name = document.getElementById('isoName').value;
+      const url = document.getElementById('isoUrl').value;
+
+      if (!name || !url) {
+        alert('Please fill in both fields.');
+        return;
+      }
+
+      const list = document.getElementById('isoList');
+      const li = document.createElement('li');
+      li.className = 'iso-item';
+      li.innerHTML = `<span>${name}</span><a href="${url}" target="_blank">Download</a>`;
+      
+      list.appendChild(li);
+
+      // Clear input fields
+      document.getElementById('isoName').value = '';
+      document.getElementById('isoUrl').value = '';
+    }
+  </script>
+</body>
+</html>

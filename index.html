@@ -190,7 +190,7 @@
       opacity: 0.9;
     }
 
-    input[type="password"] {
+    input[type="password"], input[type="text"], textarea {
       width: 100%;
       padding: 8px 12px;
       border-radius: 6px;
@@ -199,6 +199,11 @@
       color: #fff;
       margin-top: 6px;
       outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
     }
 
     input[type="file"] {
@@ -227,6 +232,15 @@
     .hidden {
       display: none !important;
     }
+
+    .panel-group {
+      margin-top: 10px;
+    }
+
+    .panel-group label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
@@ -238,17 +252,17 @@
           <div class="status-dot"></div>
         </div>
       </div>
-      <div class="speech-bubble">the only one here...</div>
+      <div class="speech-bubble" id="profileStatus">the only one here...</div>
     </div>
 
     <div class="content">
-      <div class="display-name">czz</div>
+      <div class="display-name" id="profileDisplayName">czz</div>
       <div class="username-row">
-        <span>qfck.</span> • <span>he/him</span>
+        <span id="profileUsername">qfck.</span> • <span>he/him</span>
         <span class="badge">⚔️ BMC</span>
       </div>
 
-      <div class="bio">
+      <div class="bio" id="profileBio">
         /btmc | love yall
       </div>
 
@@ -268,7 +282,7 @@
         
         <!-- PIN Input -->
         <div id="lockScreen">
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to update images:</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Enter PIN to edit profile:</p>
           <input type="password" id="pinInput" placeholder="Enter PIN">
           <button type="button" class="action-btn" onclick="unlockPanel()">Unlock</button>
         </div>
@@ -277,6 +291,28 @@
         <div id="uploadScreen" class="hidden">
           <p style="font-size: 0.8rem; color: #4cd137; margin-bottom: 6px;">✓ Authenticated</p>
           
+          <div class="panel-group">
+            <label>Display Name</label>
+            <input type="text" id="editDisplayName" placeholder="e.g. czz">
+          </div>
+
+          <div class="panel-group">
+            <label>Username</label>
+            <input type="text" id="editUsername" placeholder="e.g. qfck.">
+          </div>
+
+          <div class="panel-group">
+            <label>Status Speech Bubble</label>
+            <input type="text" id="editStatus" placeholder="e.g. the only one here...">
+          </div>
+
+          <div class="panel-group">
+            <label>Bio</label>
+            <textarea id="editBio" placeholder="e.g. /btmc | love yall"></textarea>
+          </div>
+
+          <button type="button" class="action-btn" onclick="saveTextChanges()" style="margin-bottom: 12px;">Save Profile Text</button>
+
           <label for="pfpUpload" class="file-label" id="pfpLabel">Upload Profile Picture</label>
           <input type="file" id="pfpUpload" accept="image/*" onchange="updateImage(event, 'avatar')">
 
@@ -289,19 +325,25 @@
   </div>
 
   <script>
-    // Set your PIN here (must match what you type in quotes)
     const OWNER_PIN = "10122";
 
     window.addEventListener('DOMContentLoaded', () => {
       const savedAvatar = localStorage.getItem('custom_pfp');
       const savedBanner = localStorage.getItem('custom_banner');
+      const savedDisplayName = localStorage.getItem('custom_display_name');
+      const savedUsername = localStorage.getItem('custom_username');
+      const savedStatus = localStorage.getItem('custom_status');
+      const savedBio = localStorage.getItem('custom_bio');
 
-      if (savedAvatar) {
-        document.getElementById('profileAvatar').style.backgroundImage = `url('${savedAvatar}')`;
+      if (savedAvatar) document.getElementById('profileAvatar').style.backgroundImage = `url('${savedAvatar}')`;
+      if (savedBanner) document.getElementById('profileBanner').style.backgroundImage = `url('${savedBanner}')`;
+      if (savedDisplayName) document.getElementById('profileDisplayName').innerText = savedDisplayName;
+      if (savedUsername) {
+        document.getElementById('profileUsername').innerText = savedUsername;
+        document.title = `${savedUsername} | Profile`;
       }
-      if (savedBanner) {
-        document.getElementById('profileBanner').style.backgroundImage = `url('${savedBanner}')`;
-      }
+      if (savedStatus) document.getElementById('profileStatus').innerText = savedStatus;
+      if (savedBio) document.getElementById('profileBio').innerText = savedBio;
     });
 
     function unlockPanel() {
@@ -309,9 +351,42 @@
       if (pin === OWNER_PIN) {
         document.getElementById('lockScreen').classList.add('hidden');
         document.getElementById('uploadScreen').classList.remove('hidden');
+
+        // Populate input fields with current values
+        document.getElementById('editDisplayName').value = document.getElementById('profileDisplayName').innerText;
+        document.getElementById('editUsername').value = document.getElementById('profileUsername').innerText;
+        document.getElementById('editStatus').value = document.getElementById('profileStatus').innerText;
+        document.getElementById('editBio').value = document.getElementById('profileBio').innerText;
       } else {
         alert('Incorrect PIN!');
       }
+    }
+
+    function saveTextChanges() {
+      const newDisplayName = document.getElementById('editDisplayName').value;
+      const newUsername = document.getElementById('editUsername').value;
+      const newStatus = document.getElementById('editStatus').value;
+      const newBio = document.getElementById('editBio').value;
+
+      if (newDisplayName) {
+        document.getElementById('profileDisplayName').innerText = newDisplayName;
+        localStorage.setItem('custom_display_name', newDisplayName);
+      }
+      if (newUsername) {
+        document.getElementById('profileUsername').innerText = newUsername;
+        document.title = `${newUsername} | Profile`;
+        localStorage.setItem('custom_username', newUsername);
+      }
+      if (newStatus) {
+        document.getElementById('profileStatus').innerText = newStatus;
+        localStorage.setItem('custom_status', newStatus);
+      }
+      if (newBio) {
+        document.getElementById('profileBio').innerText = newBio;
+        localStorage.setItem('custom_bio', newBio);
+      }
+
+      alert('Profile updated successfully!');
     }
 
     function updateImage(event, type) {
